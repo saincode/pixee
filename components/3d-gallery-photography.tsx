@@ -464,8 +464,16 @@ function GalleryScene({
 				const worldZ = plane.z - depthRange / 2;
 
 				// Calculate scale to maintain aspect ratio
-			const aspect = texture.image && 'width' in texture.image && 'height' in texture.image
+			const aspect = texture.image && typeof texture.image === 'object' && 'width' in texture.image && 'height' in texture.image
 				? (texture.image.width as number) / (texture.image.height as number)
+				: 1;
+			const scale: [number, number, number] =
+				aspect > 1 ? [2 * aspect, 2, 1] : [2, 2 / aspect, 1];
+
+			return (
+				<ImagePlane
+					key={plane.index}
+					imageIndex={plane.imageIndex}
 						texture={texture}
 						position={[plane.x, plane.y, worldZ]} // Position planes relative to camera center
 						scale={scale}
