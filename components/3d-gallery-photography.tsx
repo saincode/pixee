@@ -473,13 +473,12 @@ function GalleryScene({
 			return (
 				<ImagePlane
 					key={plane.index}
-					imageIndex={plane.imageIndex}
-						texture={texture}
-						position={[plane.x, plane.y, worldZ]} // Position planes relative to camera center
-						scale={scale}
-						material={material}
-					/>
-				);
+					texture={texture}
+					position={[plane.x, plane.y, worldZ]} // Position planes relative to camera center
+					scale={scale}
+					material={material}
+				/>
+			);
 			})}
 		</>
 	);
