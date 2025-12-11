@@ -4,6 +4,12 @@
 
 PIXEE helps users find all photos containing their face among 500+ event photos using client-side AI face recognition.
 
+## 🚀 Live Demo
+
+**Production URL:** [https://pixee-brvp31j7u-saincode-3046s-projects.vercel.app](https://pixee-brvp31j7u-saincode-3046s-projects.vercel.app)
+
+**GitHub Repository:** [https://github.com/saincode/pixee](https://github.com/saincode/pixee)
+
 ## 🎯 Features
 
 - **Privacy First**: All AI processing runs on your device
@@ -53,7 +59,37 @@ PIXEE helps users find all photos containing their face among 500+ event photos 
 
 4. **Setup Supabase Database**
    
-   (SQL schema will be provided in Phase 2)
+   Run this SQL in Supabase SQL Editor:
+   ```sql
+   --Face Detection Models**
+   
+   Models are already included in `/public/models/`:
+   - ✅ tiny_face_detector_model
+   - ✅ face_landmark_68_model
+   - ✅ face_recognition_model
+   
+   No additional download needed!
+   -- Create photos table
+   CREATE TABLE public.photos (
+     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+     event_id UUID NOT NULL REFERENCES public.events(id) ON DELETE CASCADE,
+     image_url TEXT NOT NULL,
+     source_type TEXT DEFAULT 'upload',
+     created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+   );
+
+   -- Enable RLS
+   ALTER TABLE public.events ENABLE ROW LEVEL SECURITY;
+   ALTER TABLE public.photos ENABLE ROW LEVEL SECURITY;
+
+   -- Create policies
+   CREATE POLICY "Allow all for events" ON public.events FOR ALL USING (true);
+   CREATE POLICY "Allow all for photos" ON public.photos FOR ALL USING (true);
+   ```
+
+   Create Storage Bucket for uploads:
+   - Go to Storage → Create bucket named `event-photos` (Public)
+   - Add policies for public read and authenticated uploads
 
 5. **Download Face Detection Models**
    
@@ -124,14 +160,29 @@ created_at  timestamp
    - AI face matching
    - Display matched photos
 
-## 🔧 Development Phases
+## 🔧 Development Status
 
 - ✅ **Phase 1**: Project setup & dependencies
-- ⏳ **Phase 2**: Supabase schema & configuration
-- ⏳ **Phase 3**: Admin page implementation
-- ⏳ **Phase 4**: AI model integration
-- ⏳ **Phase 5**: Face matching functionality
-- ⏳ **Phase 6**: Deployment to Vercel
+- ✅ **Phase 2**: Supabase schema & configuration
+- ✅ **Phase 3**: Admin page implementation
+- ✅ **Phase 4**: AI model integration
+- ✅ **Phase 5**: Face matching functionality
+- ✅ **Phase 6**: Deployment to Vercel
+
+## 🚀 Deployment
+
+Deploy to Vercel using CLI:
+
+```bash
+npm install -g vercel
+vercel --prod
+```
+
+Or push to GitHub and import in Vercel dashboard.
+
+**Environment Variables Required:**
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
 ## 📝 License
 
